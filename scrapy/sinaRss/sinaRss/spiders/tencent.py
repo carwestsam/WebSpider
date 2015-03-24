@@ -9,9 +9,9 @@ import psycopg2
 import xmltodict
 
 class SinaNewsSpider( CrawlSpider ):
-    name = 'sina'
-    allowed_domains = ['sina.com.cn']
-    start_urls = [  'http://rss.sina.com.cn/news/marquee/ddt.xml', 'http://rss.sina.com.cn/news/china/focus15.xml', 'http://rss.sina.com.cn/news/world/focus15.xml', 'http://rss.sina.com.cn/news/society/focus15.xml','http://rss.sina.com.cn/news/china/hktaiwan15.xml', 'http://rss.sina.com.cn/news/society/law15.xml', 'http://rss.sina.com.cn/news/society/misc15.xml', 'http://rss.sina.com.cn/news/society/feeling15.xml', 'http://rss.sina.com.cn/news/society/wonder15.xml' ]
+    name = 'qq'
+    allowed_domains = ['qq.com']
+    start_urls = [ 'http://news.qq.com/newsgn/rss_newsgn.xml','http://ent.qq.com/movie/rss_movie.xml' ]
     #start_urls = ['http://rss.sina.com.cn/news/world/focus15.xml']
     
     conn = None
@@ -44,11 +44,11 @@ class SinaNewsSpider( CrawlSpider ):
             time = 0
 
             if pubDate != None:
-                time = pubDate[17:25]
-                year = pubDate[12:16]
-                mon = pubDate[8:11]
-                day = pubDate[5:7]
-                weekday = pubDate[0:3]
+                time = pubDate[11:19]
+                year = pubDate[0:4]
+                mon = pubDate[5:7]
+                day = pubDate[8:10]
+                weekday = ""
                 date = year+"-"+mon+"-"+day
                 #self.cur.execute('select * from sinarss where ')
                 try:
@@ -73,6 +73,7 @@ class SinaNewsSpider( CrawlSpider ):
         print 'articleParse'
         sel = HtmlXPathSelector( response )
         l = sel.xpath('//*[@id="artibody"]/p/text()').extract()
+        l = sel.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()').extract()
 
 
         _str = ""
