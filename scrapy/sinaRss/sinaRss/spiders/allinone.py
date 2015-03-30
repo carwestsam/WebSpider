@@ -12,14 +12,14 @@ import codecs
 import json
 from lxml import html
 
-class TencentNewsSpider( CrawlSpider ):
-    name = 'qq'
+class AllNewsSpider( CrawlSpider ):
+    name = 'all'
     allowed_domains = ['qq.com']
 
     start_urls = []
     #start_urls = ['http://rss.sina.com.cn/news/world/focus15.xml']
 
-    encodeDict = {}
+    configDict = {}
 
     fileptr = None
     
@@ -35,10 +35,11 @@ class TencentNewsSpider( CrawlSpider ):
         self.cur = self.conn.cursor()
         self.fileptr = codecs.open( self.name + ".logfile", "w", 'utf-8' )
 
-        readin = codecs.open( 'sinaRss/spiders/'+self.name+"_rss.txt", "r", "utf-8" )
+        readin = codecs.open( 'sinaRss/spiders/rss_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
             obj = json.loads( rss )
             self.start_urls.append( obj['url'] )
+            self.configDict[ obj['url'] ] = obj
 
 
     def parse( self, response ):
@@ -68,11 +69,20 @@ class TencentNewsSpider( CrawlSpider ):
             time = 0
 
             if pubDate != None:
-                time = pubDate[11:19]
-                year = pubDate[0:4]
-                mon = pubDate[5:7]
-                day = pubDate[8:10]
+                conf = self.configDict[response.url]
+                print conf
+
+                #time = pubDate[11:19]
+                #year = pubDate[0:4]
+                #mon = pubDate[5:7]
+                #day = pubDate[8:10]
                 weekday = ""
+
+                time = pubDate[ conf['timestart'] : conf['timeend']]
+                year = pubDate[ conf['yearstart'] : conf['yearend']]
+                mon = pubDate[ conf['monthstart'] : conf['monthend']]
+                day = pubDate[ conf['daystart'] : conf['dayend']]
+
                 date = year+"-"+mon+"-"+day
 
                 self.op( "\n\n\n" )
@@ -87,7 +97,7 @@ class TencentNewsSpider( CrawlSpider ):
                         print 'nonononono!!!'
 
                     self.conn.commit()
-                    self.cur.execute('insert into sinarss( url, title, pubDate, pubTime, weekday, description) values( %s, %s, %s, %s, %s, %s )', (link, title, date, time, weekday, desc ))
+                    self.cur.execute('insert into allrss( url, title, pubDate, pubTime, description, rss) values( %s, %s, %s, %s, %s, %s )', (link, title, date, time, desc, response.url ))
                     self.conn.commit()
                 except psycopg2.Error as e:
                     print e.pgerror
@@ -100,13 +110,31 @@ class TencentNewsSpider( CrawlSpider ):
             yield Request( rssItem['link'], self.articleParse )
 
     def articleParse( self, response ):
-        print 'articleParse'
+        print '\n\n\n\narticleParse'
         #self.op( '\n\n\n' +  response.url + '\n' + response )
         #print response.__dict__
         #sel = HtmlXPathSelector( response )
         doc = response.body
         tree = html.fromstring(response.body.decode( response.encoding))
-        r = tree.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()')
+
+        xpathStr = "";
+        try:
+            self.conn.commit()
+            self.cur.execute('select rss from allrss where url = %s;', (response.url,))
+            rss = self.cur.fetchone()[0]
+            self.conn.commit()
+            
+        except:
+            print 'error at pass article find rss'
+            pass
+        
+        xpathStr = self.configDict[rss]['xpath']
+        print xpathStr
+        
+    
+
+        #r = tree.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()')
+        r = tree.xpath( xpathStr )
         print r[0]
 
         #l = sel.xpath('//*[@id="artibody"]/p/text()').extract()
@@ -115,8 +143,8 @@ class TencentNewsSpider( CrawlSpider ):
 
         
         _str = ""
-        #for x in l:
-        #    _str+= " " + x
+        for x in r:
+            _str+= " " + x
 
         item = contentItem()
         item['url'] = response.url
@@ -127,7 +155,7 @@ class TencentNewsSpider( CrawlSpider ):
         
         try:
             self.conn.commit()
-            #self.cur.execute('insert into sinaarticle( url, content ) values( %s, %s )', ( response.url, _str ))
+            self.cur.execute('insert into allcontent( url, content ) values( %s, %s )', ( response.url, _str ))
             self.conn.commit()
         except:
             print 'error!!!! at articleParse'
