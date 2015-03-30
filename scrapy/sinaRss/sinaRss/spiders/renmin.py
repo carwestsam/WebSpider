@@ -63,7 +63,7 @@ class AllNewsSpider( CrawlSpider ):
             title = rssItem['title']
             link = rssItem['link']
             pubDate = rssItem['pubDate']
-            desc = rssItem['description']
+            desc = ""
             print title
             print '-------------'
 
