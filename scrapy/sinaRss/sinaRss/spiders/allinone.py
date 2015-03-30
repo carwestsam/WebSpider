@@ -34,6 +34,9 @@ class AllNewsSpider( CrawlSpider ):
         self.cur = self.conn.cursor()
         self.fileptr = codecs.open( self.name + ".logfile", "w", 'utf-8' )
 
+        #todo
+        # need to edit config file
+
         readin = codecs.open( 'sinaRss/spiders/rss_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
             obj = json.loads( rss )
@@ -77,19 +80,30 @@ class AllNewsSpider( CrawlSpider ):
                 #day = pubDate[8:10]
                 weekday = ""
 
+                #todo
+                #need to edit time step
+
                 time = pubDate[ conf['timestart'] : conf['timeend']]
                 year = pubDate[ conf['yearstart'] : conf['yearend']]
                 mon = pubDate[ conf['monthstart'] : conf['monthend']]
                 day = pubDate[ conf['daystart'] : conf['dayend']]
 
+                
+                #hour = ...
+                #minute = ...
+                #second  = pubDate[ .. : ..]
+                #time = hour +":" + minute + ":" + second
+
                 date = year+"-"+mon+"-"+day
+
+
 
                 self.op( "\n\n\n" )
                 self.op( "title:\t" + title )
                 self.op ( [link , date, time, weekday].__str__() )
                 self.op( 'desc:\t' + desc )
 
-                #self.cur.execute('select * from sinarss where ')
+                
                 try:
                     #print "%s+%s+%s+%s+%s+%s" %( link, title, date, time, weekday, desc)
                     if link == None or title == None or date == None or time == None or weekday == None or desc == None:
