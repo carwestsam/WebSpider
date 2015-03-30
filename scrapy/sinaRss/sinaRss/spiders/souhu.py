@@ -12,8 +12,8 @@ import codecs
 import json
 from lxml import html
 
-class WangyiNewsSpider( CrawlSpider ):
-    name = 'wangyi'
+class SouhuNewsSpider( CrawlSpider ):
+    name = 'all'
 
     start_urls = []
     #start_urls = ['http://rss.sina.com.cn/news/world/focus15.xml']
@@ -37,7 +37,7 @@ class WangyiNewsSpider( CrawlSpider ):
         #todo
         # need to edit config file
 
-        readin = codecs.open( 'sinaRss/spiders/wangyi_rss_config.txt', "r", "utf-8" )
+        readin = codecs.open( 'sinaRss/spiders/souhu_rss_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
             obj = json.loads( rss )
             self.start_urls.append( obj['url'] )
@@ -83,56 +83,65 @@ class WangyiNewsSpider( CrawlSpider ):
                 #todo
                 #need to edit time step
 
+                
 
-                time = pubDate[ conf['timestart'] : conf['timeend']]
-                year = pubDate[ conf['yearstart'] : conf['yearend']]
-                premon = pubDate[ conf['monthstart'] : conf['monthend']]
-                day = pubDate[ conf['daystart'] : conf['dayend']]
+                
+
+                time_lenth = len(pubDate)
+                if time_lenth == 30:
+                    timestart = 17
+                    timeend = 25
+                    yearstart = 12
+                    yearend = 16
+                    monthstart = 9
+                    monthend = 11
+                    daystart = 6
+                    dayend = 8
+
+                    time = pubDate[timestart:timeend]
+                    year = pubDate[yearstart:yearend]
+                    premon = pubDate[monthstart:monthend]
+                    day = pubDate[daystart:dayend]
+
+                else:
+                    timestart = 18
+                    timeend = 26
+                    yearstart = 13
+                    yearend = 17
+                    monthstart = 9
+                    monthend = 12
+                    daystart = 6
+                    dayend = 8
+
+                    time = pubDate[timestart:timeend]
+                    year = pubDate[yearstart:yearend]
+                    premon = pubDate[monthstart:monthend]
+                    day = pubDate[daystart:dayend]
+
+                    pass
 
                 #transfer month from English to number
-                if premon == "Jan":
+                if premon == "一月":
                     mon = "01"
-<<<<<<< HEAD
-                elif premon == "Feb":
+                elif premon == "二月":
                     mon = "02"
-                elif premon == "Mar":
+                elif premon == "三月":
                     mon = "03"
-                elif premon == "Apr":
+                elif premon == "四月":
                     mon = "04"
-                elif premon == "May":
+                elif premon == "五月":
                     mon = "05"
-                elif premon == "Jun":
+                elif premon == "六月":
                     mon = "06"
-                elif premon == "Jul":
+                elif premon == "七月":
                     mon = "07"
-                elif premon == "Aug":
+                elif premon == "八月":
                     mon = "08"
-                elif premon == "Sep":
+                elif premon == "九月":
                     mon = "09"
-                elif premon == "Oct":
+                elif premon == "十月":
                     mon = "10"
-                elif premon == "Nov":
-=======
-                elif premonth == "Feb":
-                    mon = "02"
-                elif premonth == "Mar":
-                    mon = "03"
-                elif premonth == "Apr":
-                    mon = "04"
-                elif premonth == "May":
-                    mon = "05"
-                elif premonth == "Jun":
-                    mon = "06"
-                elif premonth == "Jul":
-                    mon = "07"
-                elif premonth == "Aug":
-                    mon = "08"
-                elif premonth == "Sep":
-                    mon = "09"
-                elif premonth == "Oct":
-                    mon = "10"
-                elif premonth == "Nov":
->>>>>>> 1979f0b4361cecb04f1d3323b72e6817d3b532a3
+                elif premon == "十一月":
                     mon = "11"
                 else:
                     mon = "12"
