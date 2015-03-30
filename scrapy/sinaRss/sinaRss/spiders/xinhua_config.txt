@@ -1,0 +1,24 @@
+{"url":"http://www.xinhuanet.com/ent/news_ent.xml", "xpath":"//*[@id='article']/div[@class='article']/p/text()"}
+{"url":"http://www.xinhuanet.com/edu/news_edu.xml", "xpath":"//*[@id='content']/p/text()"}
+{"url":"http://www.xinhuanet.com/legal/news_legal.xml", "xpath":"//*[@id='article']/div[@class='article']/p/text()"}
+{"url":"http://www.xinhuanet.com/fortune/news_fortune.xml", "xpath":"//*[@id='article']/div[@class='article']/p/text()"}
+{"url":"http://www.xinhuanet.com/finance/news_finance.xml", "xpath":"//*[@id='article']/div[@class='article']/p/text()"}
+{"url":"http://www.xinhuanet.com/overseas/news_overseas.xml", "xpath":"//*[@id='content']/p/text()"}
+{"url":"http://www.xinhuanet.com/tw/news_tw.xml", "xpath":"//*[@id='content']/p/text()"}
+{"url":"http://www.xinhuanet.com/mil/news_mil.xml", "xpath":"//*[@id='content']/p/text()"}
+{"url":"http://www.xinhuanet.com/local/news_province.xml", "xpath":"//*[@id='article']/div[@class='article']/p/text()"}
+{"url":"http://www.xinhuanet.com/politics/news_politics.xml", "xpath":"//*[@id='article']/div[@class='article']/p/text()"}
+{"url":"http://www.xinhuanet.com/world/news_world.xml", "xpath":"//*[@id='article']/div[@class='article']/p/text()"}
+
+
+
+
+{"url":"http://www.xinhuanet.com/sports/news_sports.xml", "xpath":"//*[@id='content']/p/text()"}// error 
+
+
+
+
+
+
+
+

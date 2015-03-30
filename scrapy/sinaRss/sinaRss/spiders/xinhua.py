@@ -12,8 +12,9 @@ import codecs
 import json
 from lxml import html
 
-class QQNewsSpider( CrawlSpider ):
-    name = 'qq'
+
+class XinhuaNewsSpider( CrawlSpider ):
+    name = 'xinhua'
 
     start_urls = []
     #start_urls = ['http://rss.sina.com.cn/news/world/focus15.xml']
@@ -37,9 +38,14 @@ class QQNewsSpider( CrawlSpider ):
         #todo
         # need to edit config file
 
-        readin = codecs.open( 'sinaRss/spiders/qq_rss.txt', "r", "utf-8" )
+        readin = codecs.open( 'sinaRss/spiders/xinhua_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
-            obj = json.loads( rss )
+            if rss == "":
+                break;
+            try:
+                obj = json.loads( rss )
+            except:
+                break
             self.start_urls.append( obj['url'] )
             self.configDict[ obj['url'] ] = obj
 
@@ -51,7 +57,7 @@ class QQNewsSpider( CrawlSpider ):
 
         xmldata = response.body
         
-        t_unicode = xmldata.decode( '' )
+        t_unicode = xmldata.decode( response.encoding )
         xmldata = t_unicode.encode('utf-8')
 
         dict = xmltodict.parse( xmldata, encoding='utf-8' )
@@ -62,9 +68,10 @@ class QQNewsSpider( CrawlSpider ):
         for rssItem in rssItems:
             title = rssItem['title']
             link = rssItem['link']
-            pubDate = rssItem['pubDate']
+            pubDate = rssItem['#text']
             desc = rssItem['description']
             print title
+            print rssItem
             print '-------------'
 
             date = 0
@@ -83,24 +90,25 @@ class QQNewsSpider( CrawlSpider ):
                 #todo
                 #need to edit time step
 
-                time = pubDate[11:19]
-                year = pubDate[0:4]
-                mon = pubDate[5:7]
-                day = pubDate[8:10]
+                #time = pubDate[ conf['timestart'] : conf['timeend']]
+                #year = pubDate[ conf['yearstart'] : conf['yearend']]
+                #mon = pubDate[ conf['monthstart'] : conf['monthend']]
+                #day = pubDate[ conf['daystart'] : conf['dayend']]
+
                 
                 #hour = ...
                 #minute = ...
                 #second  = pubDate[ .. : ..]
                 #time = hour +":" + minute + ":" + second
-
-                date = year+"-"+mon+"-"+day
+                time = pubDate[16:24]
+                date = pubDate[ 4: 15]
 
 
 
                 self.op( "\n\n\n" )
                 self.op( "title:\t" + title )
-                self.op ( [link , date, time, weekday].__str__() )
-                self.op( 'desc:\t' + desc )
+                #self.op ( [link , date, time, weekday].__str__() )
+                #self.op( 'desc:\t' + desc )
 
                 
                 try:
@@ -120,6 +128,7 @@ class QQNewsSpider( CrawlSpider ):
                     pass
 
             yield Request( rssItem['link'], self.articleParse )
+        
 
     def articleParse( self, response ):
         print '\n\n\n\narticleParse'
@@ -147,7 +156,7 @@ class QQNewsSpider( CrawlSpider ):
 
         #r = tree.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()')
         r = tree.xpath( xpathStr )
-        print r[0]
+
 
         #l = sel.xpath('//*[@id="artibody"]/p/text()').extract()
         #l = sel.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()').extract()
@@ -176,3 +185,4 @@ class QQNewsSpider( CrawlSpider ):
         print '++++++++++++++++\n'
 
         yield item
+

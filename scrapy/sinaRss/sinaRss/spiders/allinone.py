@@ -133,7 +133,7 @@ class AllNewsSpider( CrawlSpider ):
         xpathStr = "";
         try:
             self.conn.commit()
-            self.cur.execute('select rss from allrss where url = %s;', (response.url,))
+            self.cur.execute('select rss from allrss where url like %s;', ("%%"+response.url+"%%",))
             rss = self.cur.fetchone()[0]
             self.conn.commit()
             
