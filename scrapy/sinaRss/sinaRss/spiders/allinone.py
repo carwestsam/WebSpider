@@ -14,7 +14,6 @@ from lxml import html
 
 class AllNewsSpider( CrawlSpider ):
     name = 'all'
-    allowed_domains = ['qq.com']
 
     start_urls = []
     #start_urls = ['http://rss.sina.com.cn/news/world/focus15.xml']
