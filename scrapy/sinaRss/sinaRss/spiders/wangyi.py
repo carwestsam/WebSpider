@@ -13,7 +13,7 @@ import json
 from lxml import html
 
 class WangyiNewsSpider( CrawlSpider ):
-    name = 'all'
+    name = 'wangyi'
 
     start_urls = []
     #start_urls = ['http://rss.sina.com.cn/news/world/focus15.xml']
@@ -91,25 +91,25 @@ class WangyiNewsSpider( CrawlSpider ):
                 #transfer month from English to number
                 if premonth == "Jan":
                     mon = "01"
-                else if premonth == "Feb":
+                elif premonth == "Feb":
                     mon = "02"
-                else if premonth == "Mar":
+                elif premonth == "Mar":
                     mon = "03"
-                else if premonth == "Apr":
+                elif premonth == "Apr":
                     mon = "04"
-                else if premonth == "May":
+                elif premonth == "May":
                     mon = "05"
-                else if premonth == "Jun":
+                elif premonth == "Jun":
                     mon = "06"
-                else if premonth == "Jul":
+                elif premonth == "Jul":
                     mon = "07"
-                else if premonth == "Aug":
+                elif premonth == "Aug":
                     mon = "08"
-                else if premonth == "Sep":
+                elif premonth == "Sep":
                     mon = "09"
-                else if premonth == "Oct":
+                elif premonth == "Oct":
                     mon = "10"
-                else if premonth == "Nov":
+                elif premonth == "Nov":
                     mon = "11"
                 else:
                     mon = "12"
