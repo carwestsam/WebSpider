@@ -1,16 +1,16 @@
-{"url":"http://news.163.com/special/00011K6L/rss_newstop.xml", "xpath":"//*[@id='endText']/p/text()","timestart":18, "timeend”:26,”yearstart”:13, "yearend”:17,”monthstart”:9, "monthend”:12, "daystart”:6, "dayend”:8}
+{"url":"http://rss.news.sohu.com/rss/focus.xml", "xpath":"//*[@id='sohu_content']/p/text()"}
+{"url":"http://rss.news.sohu.com/rss/guonei.xml", "xpath":"///*[@id='contentText']/p/text()"}
+{"url":"http://rss.news.sohu.com/rss/guoji.xml", "xpath":"//*[@id='contentText']/div[1]/p/text()"}
+{"url":"http://rss.news.sohu.com/rss/shehui.xml", "xpath":"//*[@id='contentText']/div[1]/p[1]/p/text()"}
+{"url":"http://mil.sohu.com/rss/junshi.xml", "xpath":"//*[@id='contentText']/div[1]/p/text()"}
+{"url":"http://rss.news.sohu.com/rss/sports.xml", "xpath":"//*[@id='contentText']/div[1]/p/text()"}
+{"url":"http://rss.news.sohu.com/rss/business.xml", "xpath":"//*[@id='contentText']/div[1]/p/text()"}
+{"url":"http://rss.news.sohu.com/rss/it.xml", "xpath":"//*[@id='contentText']/div[1]/p/text()"}
+{"url":"http://rss.news.sohu.com/rss/learning.xml", "xpath":"//*[@id='contentText']/div[1]/p/text()"}
+{"url":"http://rss.news.sohu.com/rss/yule.xml", "xpath":"//*[@id='contentText']/div[1]/p/text()"}
 
-{"url":"http://news.163.com/special/00011K6L/rss_gn.xml", "xpath":"//*[@id='endText']/p/text()","timestart":18, "timeend”:26,”yearstart”:13, "yearend”:17,”monthstart”:9, "monthend”:12, "daystart”:6, "dayend”:8}
 
-{"url":"view-source:http://news.163.com/special/00011K6L/rss_gj.xml", "xpath":"//*[@id='endText']/p/text()","timestart":18, "timeend”:26,”yearstart”:13, "yearend”:17,”monthstart”:9, "monthend”:12, "daystart”:6, "dayend”:8}
 
-{"url":"http://news.163.com/special/00011K6L/rss_sh.xml", "xpath":"//*[@id='endText']/p/text()","timestart":18, "timeend”:26,”yearstart”:13, "yearend”:17,”monthstart”:9, "monthend”:12, "daystart”:6, "dayend”:8}
-
-{"url":"view-source:http://news.163.com/special/00011K6L/rss_hotnews.xml", "xpath":"//*[@id='endText']/p/text()","timestart":18, "timeend”:26,”yearstart”:13, "yearend”:17,”monthstart”:9, "monthend”:12, "daystart”:6, "dayend”:8}
-
-{"url":"http://news.163.com/special/00011K6L/rss_newsspecial.xml", "xpath":"/html/body/div[2]/div[3]/div[2]/p/text()","timestart":18, "timeend”:26,”yearstart”:13, "yearend”:17,”monthstart”:9, "monthend”:12, "daystart”:6, "dayend”:8}
-
-{"url":"view-source:http://news.163.com/special/00011K6L/rss_hotnews.xml", "xpath":"//*[@id='endText']/p/text()","timestart":18, "timeend”:26,”yearstart”:13, "yearend”:17,”monthstart”:9, "monthend”:12, "daystart”:6, "dayend”:8}
 
 
 

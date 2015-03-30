@@ -83,33 +83,65 @@ class SouhuNewsSpider( CrawlSpider ):
                 #todo
                 #need to edit time step
 
-                time = pubDate[ conf['timestart'] : conf['timeend']]
-                year = pubDate[ conf['yearstart'] : conf['yearend']]
-                premon = pubDate[ conf['monthstart'] : conf['monthend']]
-                day = pubDate[ conf['daystart'] : conf['dayend']]
+                
+
+                
+
+                time_lenth = len(pubDate)
+                if time_lenth == 30:
+                    timestart = 17
+                    timeend = 25
+                    yearstart = 12
+                    yearend = 16
+                    monthstart = 9
+                    monthend = 11
+                    daystart = 6
+                    dayend = 8
+
+                    time = pubDate[timestart:timeend]
+                    year = pubDate[yearstart:yearend]
+                    premon = pubDate[monthstart:monthend]
+                    day = pubDate[daystart:dayend]
+
+                else:
+                    timestart = 18
+                    timeend = 26
+                    yearstart = 13
+                    yearend = 17
+                    monthstart = 9
+                    monthend = 12
+                    daystart = 6
+                    dayend = 8
+
+                    time = pubDate[timestart:timeend]
+                    year = pubDate[yearstart:yearend]
+                    premon = pubDate[monthstart:monthend]
+                    day = pubDate[daystart:dayend]
+
+                    pass
 
                 #transfer month from English to number
-                if premonth == "Jan":
+                if premon == "一月":
                     mon = "01"
-                else if premonth == "Feb":
+                elif premon == "二月":
                     mon = "02"
-                else if premonth == "Mar":
+                elif premon == "三月":
                     mon = "03"
-                else if premonth == "Apr":
+                elif premon == "四月":
                     mon = "04"
-                else if premonth == "May":
+                elif premon == "五月":
                     mon = "05"
-                else if premonth == "Jun":
+                elif premon == "六月":
                     mon = "06"
-                else if premonth == "Jul":
+                elif premon == "七月":
                     mon = "07"
-                else if premonth == "Aug":
+                elif premon == "八月":
                     mon = "08"
-                else if premonth == "Sep":
+                elif premon == "九月":
                     mon = "09"
-                else if premonth == "Oct":
+                elif premon == "十月":
                     mon = "10"
-                else if premonth == "Nov":
+                elif premon == "十一月":
                     mon = "11"
                 else:
                     mon = "12"
