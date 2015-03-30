@@ -12,7 +12,7 @@ import codecs
 import json
 from lxml import html
 
-class WangyiNewsSpider( CrawlSpider ):
+class SouhuNewsSpider( CrawlSpider ):
     name = 'all'
 
     start_urls = []
@@ -37,7 +37,7 @@ class WangyiNewsSpider( CrawlSpider ):
         #todo
         # need to edit config file
 
-        readin = codecs.open( 'sinaRss/spiders/wangyi_rss_config.txt', "r", "utf-8" )
+        readin = codecs.open( 'sinaRss/spiders/souhu_rss_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
             obj = json.loads( rss )
             self.start_urls.append( obj['url'] )
@@ -83,34 +83,33 @@ class WangyiNewsSpider( CrawlSpider ):
                 #todo
                 #need to edit time step
 
-
                 time = pubDate[ conf['timestart'] : conf['timeend']]
                 year = pubDate[ conf['yearstart'] : conf['yearend']]
                 premon = pubDate[ conf['monthstart'] : conf['monthend']]
                 day = pubDate[ conf['daystart'] : conf['dayend']]
 
                 #transfer month from English to number
-                if premon == "Jan":
+                if premonth == "Jan":
                     mon = "01"
-                elif premon == "Feb":
+                else if premonth == "Feb":
                     mon = "02"
-                elif premon == "Mar":
+                else if premonth == "Mar":
                     mon = "03"
-                elif premon == "Apr":
+                else if premonth == "Apr":
                     mon = "04"
-                elif premon == "May":
+                else if premonth == "May":
                     mon = "05"
-                elif premon == "Jun":
+                else if premonth == "Jun":
                     mon = "06"
-                elif premon == "Jul":
+                else if premonth == "Jul":
                     mon = "07"
-                elif premon == "Aug":
+                else if premonth == "Aug":
                     mon = "08"
-                elif premon == "Sep":
+                else if premonth == "Sep":
                     mon = "09"
-                elif premon == "Oct":
+                else if premonth == "Oct":
                     mon = "10"
-                elif premon == "Nov":
+                else if premonth == "Nov":
                     mon = "11"
                 else:
                     mon = "12"
