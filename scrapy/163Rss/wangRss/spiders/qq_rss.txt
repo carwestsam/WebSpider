@@ -1,0 +1,1 @@
+{"url":"http://news.qq.com/newsgn/rss_newsgn.xml", "xpath":"//*[@id='Cnt-Mai`n-Article-QQ']/p/text()"}
