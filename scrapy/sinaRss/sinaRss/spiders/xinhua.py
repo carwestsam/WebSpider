@@ -70,16 +70,16 @@ class XinhuaNewsSpider( CrawlSpider ):
             link = rssItem['link']
             pubDate = rssItem['#text']
             desc = rssItem['description']
-            print title
-            print rssItem
-            print '-------------'
+            #print title
+            #print rssItem
+            #print '-------------'
 
             date = 0
             time = 0
 
             if pubDate != None:
                 conf = self.configDict[response.url]
-                print conf
+                #print conf
 
                 #time = pubDate[11:19]
                 #year = pubDate[0:4]
@@ -150,7 +150,7 @@ class XinhuaNewsSpider( CrawlSpider ):
             pass
         
         xpathStr = self.configDict[rss]['xpath']
-        print xpathStr
+        #print xpathStr
         
     
 

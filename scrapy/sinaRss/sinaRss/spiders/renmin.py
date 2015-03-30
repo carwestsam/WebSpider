@@ -72,7 +72,7 @@ class AllNewsSpider( CrawlSpider ):
 
             if pubDate != None:
                 conf = self.configDict[response.url]
-                print conf
+                #print conf
 
                 #time = pubDate[11:19]
                 #year = pubDate[0:4]
@@ -142,13 +142,13 @@ class AllNewsSpider( CrawlSpider ):
             pass
         
         xpathStr = self.configDict[rss]['xpath']
-        print xpathStr
+        #print xpathStr
         
     
 
         #r = tree.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()')
         r = tree.xpath( xpathStr )
-        print r[0]
+        #print r[0]
 
         #l = sel.xpath('//*[@id="artibody"]/p/text()').extract()
         #l = sel.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()').extract()

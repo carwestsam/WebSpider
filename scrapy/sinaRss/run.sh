@@ -2,7 +2,8 @@
 
 while true; do
     scrapy crawl sina
-    scrapy crawl qq
-    sleep 5m
+    scrapy crawl renmin
+    scrapy crawl xinhua
+    sleep 10m
 done
 
