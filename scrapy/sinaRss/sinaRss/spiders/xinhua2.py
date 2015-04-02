@@ -12,11 +12,11 @@ import codecs
 import json
 from lxml import html
 
-class SinaNewsSpider( CrawlSpider ):
-    name = 'sina'
+
+class XinhuaNewsSpider( CrawlSpider ):
+    name = 'xinhua2'
 
     start_urls = []
-    #start_urls = ['http://rss.sina.com.cn/news/world/focus15.xml']
 
     configDict = {}
 
@@ -30,16 +30,21 @@ class SinaNewsSpider( CrawlSpider ):
         
 
     def __init__( self ):
-        self.conn = psycopg2.connect("dbname=news user=carwest ")
+        self.conn = psycopg2.connect("dbname=news user=bdccl ")
         self.cur = self.conn.cursor()
         self.fileptr = codecs.open( self.name + ".logfile", "w", 'utf-8' )
 
         #todo
         # need to edit config file
 
-        readin = codecs.open( 'sinaRss/spiders/sina_config.txt', "r", "utf-8" )
+        readin = codecs.open( 'sinaRss/spiders/xinhua_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
-            obj = json.loads( rss )
+            if rss == "":
+                break;
+            try:
+                obj = json.loads( rss )
+            except:
+                break
             self.start_urls.append( obj['url'] )
             self.configDict[ obj['url'] ] = obj
 
@@ -47,7 +52,6 @@ class SinaNewsSpider( CrawlSpider ):
     def parse( self, response ):
 
         print response.url
-        #print self.encodeDict[response.url]
 
         xmldata = response.body
         
@@ -62,109 +66,83 @@ class SinaNewsSpider( CrawlSpider ):
         for rssItem in rssItems:
             title = rssItem['title']
             link = rssItem['link']
-            pubDate = rssItem['pubDate']
+            pubDate = rssItem['#text']
             desc = rssItem['description']
             print title
-            print '-------------'
+            print rssItem
+            #print '-------------'
 
             date = "19700101"
             time = "12:53:83"
 
             if pubDate != None:
                 conf = self.configDict[response.url]
-                
 
                 #time = pubDate[11:19]
                 #year = pubDate[0:4]
                 #mon = pubDate[5:7]
                 #day = pubDate[8:10]
-                weekday = ""
 
                 #todo
                 #need to edit time step
 
-                time = pubDate[17:25]
-                year = pubDate[12:16]
-                mon = pubDate[8:11]
-                day = pubDate[5:7]
+                #time = pubDate[ conf['timestart'] : conf['timeend']]
+                #year = pubDate[ conf['yearstart'] : conf['yearend']]
+                #mon = pubDate[ conf['monthstart'] : conf['monthend']]
+                #day = pubDate[ conf['daystart'] : conf['dayend']]
 
-                
                 #hour = ...
                 #minute = ...
                 #second  = pubDate[ .. : ..]
                 #time = hour +":" + minute + ":" + second
+                time = pubDate[16:24]
+                date = pubDate[ 4: 15]
 
-                date = year+"-"+mon+"-"+day
-
-
-
-                #self.op( "\n\n\n" )
-                #self.op( "title:\t" + title )
+            #self.op( "\n\n\n" )
+            #self.op( "title:\t" + title )
                 #self.op ( [link , date, time, weekday].__str__() )
                 #self.op( 'desc:\t' + desc )
 
                 
-                try:
-                    #print "%s+%s+%s+%s+%s+%s" %( link, title, date, time, weekday, desc)
-                    if link == None or title == None or date == None or time == None or weekday == None or desc == None:
-                        print 'nonononono!!!'
+            try:
+                #print "%s+%s+%s+%s+%s+%s" %( link, title, date, time, weekday, desc)
+                self.conn.commit()
+                self.cur.execute('insert into allrss( url, title, pubDate, pubTime, description, rss) values( %s, %s, %s, %s, %s, %s )', (link, title, date, time, desc, response.url ))
+                self.conn.commit()
 
-                    self.conn.commit()
-                    self.cur.execute('insert into allrss( url, title, pubDate, pubTime, description, rss) values( %s, %s, %s, %s, %s, %s )', (link, title, date, time, desc, response.url ))
-                    self.conn.commit()
-                except psycopg2.Error as e:
-                    print e.pgerror
-                    print 'error!!! at parse'
-                    pass
-                except:
-                    print 'no'
-                    pass
+                req = Request( rssItem['link'], self.articleParse )
 
-            yield Request( rssItem['link'], self.articleParse )
-
+                req.meta['url'] = link
+                req.meta['xpath'] = self.configDict[response.url]['xpath']
+                yield req
+            except psycopg2.Error as e:
+                print e.pgerror
+                print 'error!!! at parse'
+                pass
+            except:
+                print 'no'
+                pass
+            pass
+            
     def articleParse( self, response ):
-        print '\n\n\n\narticleParse'
+        print '\n\n\n\narticleParse' + response.meta['url']
         #self.op( '\n\n\n' +  response.url + '\n' + response )
         #print response.__dict__
         #sel = HtmlXPathSelector( response )
+
         doc = response.body
         tree = html.fromstring(response.body.decode( response.encoding))
 
-        xpathStr = "";
-        rss ="";
-        try:
-            self.conn.commit()
-            self.cur.execute('select rss from allrss where url like %s;', ("%%"+response.url+"%%",))
-            print 'pp'
-            rss = self.cur.fetchone()
-            print rss
-            rss  = rss[0]
-            self.conn.commit()
-            
-        except:
-            print 'error at pass article find rss'
-            pass
-        
-        xpathStr = self.configDict[rss]['xpath']
-        print xpathStr
-    
+        xpathStr = response.meta ['xpath']
 
-        #r = tree.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()')
         r = tree.xpath( xpathStr )
-        #print r[0]
 
-        #l = sel.xpath('//*[@id="artibody"]/p/text()').extract()
-        #l = sel.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()').extract()
-
-
-        
         _str = ""
         for x in r:
-            if type( r ).__name__ == 'str':
-                _str+= " " + x
+            _str+= " " + x
 
         item = contentItem()
-        item['url'] = response.url
+        item['url'] = response.meta['url']
         item['content'] = _str
         self.op( '\n\n\n' )
         self.op( response.url )
@@ -172,7 +150,7 @@ class SinaNewsSpider( CrawlSpider ):
         
         try:
             self.conn.commit()
-            self.cur.execute('insert into allcontent( url, content ) values( %s, %s )', ( response.url, _str ))
+            self.cur.execute('insert into allcontent( url, content ) values( %s, %s )', ( item['url'], _str ))
             self.conn.commit()
         except:
             print 'error!!!! at articleParse'
@@ -180,5 +158,4 @@ class SinaNewsSpider( CrawlSpider ):
 
         print '++++++++++++++++\n'
 
-        yield item
-
+        return item
