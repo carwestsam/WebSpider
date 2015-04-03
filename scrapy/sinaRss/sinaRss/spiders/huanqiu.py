@@ -66,7 +66,7 @@ class XinhuaNewsSpider( CrawlSpider ):
         for rssItem in rssItems:
             title = rssItem['title']
             link = rssItem['link']
-            pubDate = rssItem['#text']
+            pubDate = rssItem['pubDate']
             desc = rssItem['description']
             print title
             print rssItem
@@ -95,8 +95,9 @@ class XinhuaNewsSpider( CrawlSpider ):
                 #minute = ...
                 #second  = pubDate[ .. : ..]
                 #time = hour +":" + minute + ":" + second
-                time = pubDate[16:24]
-                date = pubDate[ 4: 15]
+                tmp1 = pubDate.split(" ")
+                time = tmp1[1]
+                date = tmp1[0]
 
             #self.op( "\n\n\n" )
             #self.op( "title:\t" + title )

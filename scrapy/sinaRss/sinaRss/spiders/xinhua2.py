@@ -95,9 +95,9 @@ class XinhuaNewsSpider( CrawlSpider ):
                 #minute = ...
                 #second  = pubDate[ .. : ..]
                 #time = hour +":" + minute + ":" + second
-                
+
                 tmp1 = pubDate.split(" ")
-                tmp2 = pubDate.split(",")
+                tmp2 = tmp1[0].split(",")
                 time = tmp1[1]
                 date = tmp2[1]
 
