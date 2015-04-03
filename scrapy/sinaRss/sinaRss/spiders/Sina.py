@@ -67,12 +67,12 @@ class SinaNewsSpider( CrawlSpider ):
             print title
             print '-------------'
 
-            date = "19700101"
-            time = "12:53:83"
+            date = 0
+            time = 0
 
             if pubDate != None:
                 conf = self.configDict[response.url]
-                
+                print conf
 
                 #time = pubDate[11:19]
                 #year = pubDate[0:4]

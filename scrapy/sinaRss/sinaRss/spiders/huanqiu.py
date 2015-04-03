@@ -14,7 +14,7 @@ from lxml import html
 
 
 class XinhuaNewsSpider( CrawlSpider ):
-    name = 'xinhua2'
+    name = 'huanqiu'
 
     start_urls = []
 
@@ -37,7 +37,7 @@ class XinhuaNewsSpider( CrawlSpider ):
         #todo
         # need to edit config file
 
-        readin = codecs.open( 'sinaRss/spiders/xinhua_config.txt', "r", "utf-8" )
+        readin = codecs.open( 'sinaRss/spiders/huanqiu_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
             if rss == "":
                 break;
@@ -95,11 +95,8 @@ class XinhuaNewsSpider( CrawlSpider ):
                 #minute = ...
                 #second  = pubDate[ .. : ..]
                 #time = hour +":" + minute + ":" + second
-                
-                tmp1 = pubDate.split(" ")
-                tmp2 = pubDate.split(",")
-                time = tmp1[1]
-                date = tmp2[1]
+                time = pubDate[16:24]
+                date = pubDate[ 4: 15]
 
             #self.op( "\n\n\n" )
             #self.op( "title:\t" + title )
