@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.selector import Selector
@@ -12,8 +14,9 @@ import codecs
 import json
 from lxml import html
 
-class WangyiNewsSpider( CrawlSpider ):
-    name = 'wangyi'
+
+class SouhuNewsSpider( CrawlSpider ):
+    name = 'souhu'
 
     start_urls = []
     #start_urls = ['http://rss.sina.com.cn/news/world/focus15.xml']
@@ -37,9 +40,14 @@ class WangyiNewsSpider( CrawlSpider ):
         #todo
         # need to edit config file
 
-        readin = codecs.open( 'sinaRss/spiders/wangyi_rss_config.txt', "r", "utf-8" )
+        readin = codecs.open( 'sinaRss/spiders/souhu_rss_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
-            obj = json.loads( rss )
+            if rss == "":
+                break;
+            try:
+                obj = json.loads( rss )
+            except:
+                break
             self.start_urls.append( obj['url'] )
             self.configDict[ obj['url'] ] = obj
 
@@ -64,15 +72,16 @@ class WangyiNewsSpider( CrawlSpider ):
             link = rssItem['link']
             pubDate = rssItem['pubDate']
             desc = rssItem['description']
-            print title
-            print '-------------'
+            #print title
+            #print rssItem
+            #print '-------------'
 
             date = 0
             time = 0
 
             if pubDate != None:
                 conf = self.configDict[response.url]
-                print conf
+                #print conf
 
                 #time = pubDate[11:19]
                 #year = pubDate[0:4]
@@ -83,56 +92,86 @@ class WangyiNewsSpider( CrawlSpider ):
                 #todo
                 #need to edit time step
 
-
-                time = pubDate[ conf['timestart'] : conf['timeend']]
-                year = pubDate[ conf['yearstart'] : conf['yearend']]
-                premon = pubDate[ conf['monthstart'] : conf['monthend']]
-                day = pubDate[ conf['daystart'] : conf['dayend']]
-
-                #transfer month from English to number
-                if premon == "Jan":
-                    mon = "01"
-                elif premon == "Feb":
-                    mon = "02"
-                elif premon == "Mar":
-                    mon = "03"
-                elif premon == "Apr":
-                    mon = "04"
-                elif premon == "May":
-                    mon = "05"
-                elif premon == "Jun":
-                    mon = "06"
-                elif premon == "Jul":
-                    mon = "07"
-                elif premon == "Aug":
-                    mon = "08"
-                elif premon == "Sep":
-                    mon = "09"
-                elif premon == "Oct":
-                    mon = "10"
-                elif premon == "Nov":
-                    mon = "11"
-                elif premon == "Dec":
-                    mon = "12"
-		        else:
-		            mon = "01"
-
-
+                #time = pubDate[ conf['timestart'] : conf['timeend']]
+                #year = pubDate[ conf['yearstart'] : conf['yearend']]
+                #mon = pubDate[ conf['monthstart'] : conf['monthend']]
+                #day = pubDate[ conf['daystart'] : conf['dayend']]
 
                 
                 #hour = ...
                 #minute = ...
                 #second  = pubDate[ .. : ..]
                 #time = hour +":" + minute + ":" + second
+                time = pubDate[16:24]
+                date = pubDate[ 4: 15]
 
-                date = year+"-"+mon+"-"+day
+                time_lenth = len(pubDate)
+                if time_lenth == 30:
+                    timestart = 16
+                    timeend = 24
+                    yearstart = 11
+                    yearend = 15
+                    monthstart = 8
+                    monthend = 10
+                    daystart = 5
+                    dayend = 7
+
+                    time = pubDate[timestart:timeend]
+                    year = pubDate[yearstart:yearend]
+                    premon = pubDate[monthstart:monthend]
+                    day = pubDate[daystart:dayend]
+
+                else:
+                    timestart = 17
+                    timeend = 25
+                    yearstart = 12
+                    yearend = 16
+                    monthstart = 8
+                    monthend = 11
+                    daystart = 5
+                    dayend = 7
+
+                    time = pubDate[timestart:timeend]
+                    year = pubDate[yearstart:yearend]
+                    premon = pubDate[monthstart:monthend]
+                    day = pubDate[daystart:dayend]
+
+                    pass
+
+                #transfer month from English to number
+                if premon == u"一月":
+                    mon = "01"
+                elif premon == u"二月":
+                    mon = "02"
+                elif premon == u"三月":
+                    mon = "03"
+                elif premon == u"四月":
+                    mon = "04"
+                elif premon == u"五月":
+                    mon = "05"
+                elif premon == u"六月":
+                    mon = "06"
+                elif premon == u"七月":
+                    mon = "07"
+                elif premon == u"八月":
+                    mon = "08"
+                elif premon == u"九月":
+                    mon = "09"
+                elif premon == u"十月":
+                    mon = "10"
+                elif premon == u"十一月":
+                    mon = "11"
+                elif premon == u"十二月":
+                    mon = "12"
+                else:
+                    mon = "01"
 
 
 
                 self.op( "\n\n\n" )
                 self.op( "title:\t" + title )
-                self.op ( [link , date, time, weekday].__str__() )
-                self.op( 'desc:\t' + desc )
+                #self.op ( [link , date, time, weekday].__str__() )
+                #self.op( 'desc:\t' + desc )
 
                 
                 try:
@@ -152,6 +191,7 @@ class WangyiNewsSpider( CrawlSpider ):
                     pass
 
             yield Request( rssItem['link'], self.articleParse )
+        
 
     def articleParse( self, response ):
         print '\n\n\n\narticleParse'
@@ -164,7 +204,7 @@ class WangyiNewsSpider( CrawlSpider ):
         xpathStr = "";
         try:
             self.conn.commit()
-            self.cur.execute('select rss from allrss where url = %s;', (response.url,))
+            self.cur.execute('select rss from allrss where url like %s;', ("%%"+response.url+"%%",))
             rss = self.cur.fetchone()[0]
             self.conn.commit()
             
@@ -173,13 +213,13 @@ class WangyiNewsSpider( CrawlSpider ):
             pass
         
         xpathStr = self.configDict[rss]['xpath']
-        print xpathStr
+        #print xpathStr
         
     
 
         #r = tree.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()')
         r = tree.xpath( xpathStr )
-        print r[0]
+
 
         #l = sel.xpath('//*[@id="artibody"]/p/text()').extract()
         #l = sel.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()').extract()
