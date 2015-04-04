@@ -176,8 +176,6 @@ class SouhuNewsSpider( CrawlSpider ):
                 
                 try:
                     #print "%s+%s+%s+%s+%s+%s" %( link, title, date, time, weekday, desc)
-                    if link == None or title == None or date == None or time == None or weekday == None or desc == None:
-                        print 'nonononono!!!'
 
                     self.conn.commit()
                     self.cur.execute('insert into allrss( url, title, pubDate, pubTime, description, rss) values( %s, %s, %s, %s, %s, %s )', (link, title, date, time, desc, response.url ))
