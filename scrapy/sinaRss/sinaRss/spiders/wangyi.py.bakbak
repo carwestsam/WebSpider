@@ -12,6 +12,7 @@ import codecs
 import json
 from lxml import html
 
+
 class WangyiNewsSpider( CrawlSpider ):
     name = 'wangyi'
 
@@ -39,7 +40,12 @@ class WangyiNewsSpider( CrawlSpider ):
 
         readin = codecs.open( 'sinaRss/spiders/wangyi_rss_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
-            obj = json.loads( rss )
+            if rss == "":
+                break;
+            try:
+                obj = json.loads( rss )
+            except:
+                break
             self.start_urls.append( obj['url'] )
             self.configDict[ obj['url'] ] = obj
 
@@ -64,15 +70,16 @@ class WangyiNewsSpider( CrawlSpider ):
             link = rssItem['link']
             pubDate = rssItem['pubDate']
             desc = rssItem['description']
-            print title
-            print '-------------'
+            #print title
+            #print rssItem
+            #print '-------------'
 
             date = 0
             time = 0
 
             if pubDate != None:
                 conf = self.configDict[response.url]
-                print conf
+                #print conf
 
                 #time = pubDate[11:19]
                 #year = pubDate[0:4]
@@ -83,7 +90,16 @@ class WangyiNewsSpider( CrawlSpider ):
                 #todo
                 #need to edit time step
 
+                #time = pubDate[ conf['timestart'] : conf['timeend']]
+                #year = pubDate[ conf['yearstart'] : conf['yearend']]
+                #mon = pubDate[ conf['monthstart'] : conf['monthend']]
+                #day = pubDate[ conf['daystart'] : conf['dayend']]
 
+                
+                #hour = ...
+                #minute = ...
+                #second  = pubDate[ .. : ..]
+                #time = hour +":" + minute + ":" + second
                 time = pubDate[ conf['timestart'] : conf['timeend']]
                 year = pubDate[ conf['yearstart'] : conf['yearend']]
                 premon = pubDate[ conf['monthstart'] : conf['monthend']]
@@ -114,16 +130,8 @@ class WangyiNewsSpider( CrawlSpider ):
                     mon = "11"
                 elif premon == "Dec":
                     mon = "12"
-		        else:
-		            mon = "01"
-
-
-
-                
-                #hour = ...
-                #minute = ...
-                #second  = pubDate[ .. : ..]
-                #time = hour +":" + minute + ":" + second
+                else:
+                    mon = "01"
 
                 date = year+"-"+mon+"-"+day
 
@@ -131,8 +139,8 @@ class WangyiNewsSpider( CrawlSpider ):
 
                 self.op( "\n\n\n" )
                 self.op( "title:\t" + title )
-                self.op ( [link , date, time, weekday].__str__() )
-                self.op( 'desc:\t' + desc )
+                #self.op ( [link , date, time, weekday].__str__() )
+                #self.op( 'desc:\t' + desc )
 
                 
                 try:
@@ -152,6 +160,7 @@ class WangyiNewsSpider( CrawlSpider ):
                     pass
 
             yield Request( rssItem['link'], self.articleParse )
+        
 
     def articleParse( self, response ):
         print '\n\n\n\narticleParse'
@@ -164,7 +173,7 @@ class WangyiNewsSpider( CrawlSpider ):
         xpathStr = "";
         try:
             self.conn.commit()
-            self.cur.execute('select rss from allrss where url = %s;', (response.url,))
+            self.cur.execute('select rss from allrss where url like %s;', ("%%"+response.url+"%%",))
             rss = self.cur.fetchone()[0]
             self.conn.commit()
             
@@ -173,13 +182,13 @@ class WangyiNewsSpider( CrawlSpider ):
             pass
         
         xpathStr = self.configDict[rss]['xpath']
-        print xpathStr
+        #print xpathStr
         
     
 
         #r = tree.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()')
         r = tree.xpath( xpathStr )
-        print r[0]
+
 
         #l = sel.xpath('//*[@id="artibody"]/p/text()').extract()
         #l = sel.xpath('//*[@id="Cnt-Main-Article-QQ"]/p/text()').extract()

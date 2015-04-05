@@ -39,6 +39,8 @@ class WangyiNewsSpider( CrawlSpider ):
 
         readin = codecs.open( 'sinaRss/spiders/wangyi_rss_config.txt', "r", "utf-8" )
         for rss in readin.readlines():
+            if ( len(rss) <2 ):
+                break
             obj = json.loads( rss )
             self.start_urls.append( obj['url'] )
             self.configDict[ obj['url'] ] = obj
@@ -114,8 +116,8 @@ class WangyiNewsSpider( CrawlSpider ):
                     mon = "11"
                 elif premon == "Dec":
                     mon = "12"
-		        else:
-		            mon = "01"
+		else:
+		    mon = "01"
 
 
 
@@ -167,6 +169,7 @@ class WangyiNewsSpider( CrawlSpider ):
             self.cur.execute('select rss from allrss where url = %s;', (response.url,))
             rss = self.cur.fetchone()[0]
             self.conn.commit()
+            return
             
         except:
             print 'error at pass article find rss'
