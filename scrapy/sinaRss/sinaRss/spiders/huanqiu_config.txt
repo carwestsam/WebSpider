@@ -1,4 +1,5 @@
 {"url":"http://rss.huanqiu.com/world/hot.xml", "xpath":"//*[@id='text']/p/descendant-or-self::*/text()"}
+
 {"url":"http://rss.huanqiu.com/history/world.xml",  "xpath":"//*[@id='text']/p/descendant-or-self::*/text()"}
 {"url":"http://rss.huanqiu.com/mil/world.xml",  "xpath":"//*[@id='text']/p/descendant-or-self::*/text()"}
 {"url":"http://rss.huanqiu.com/mil/paper.xml",  "xpath":"//*[@id='text']/p/descendant-or-self::*/text()"}
