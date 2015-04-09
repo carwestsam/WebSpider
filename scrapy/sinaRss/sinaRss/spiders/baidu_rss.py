@@ -32,7 +32,7 @@ class baiduNewsSpider( CrawlSpider ):
         
 
     def __init__( self ):
-        self.conn = psycopg2.connect("dbname=news user=carwest")
+        self.conn = psycopg2.connect("dbname=news user=bdccl")
         self.cur = self.conn.cursor()
         self.fileptr = codecs.open( self.name + ".logfile", "w", 'utf-8' )
 
