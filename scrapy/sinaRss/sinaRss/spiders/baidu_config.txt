@@ -4,7 +4,6 @@
 {"url":"http://news.baidu.com/n?cmd=4&class=twms&tn=rss"}
 {"url":"http://news.baidu.com/n?cmd=4&class=hqsy&tn=rss"}
 {"url":"http://news.baidu.com/n?cmd=4&class=renwu&tn=rss"}
-
 {"url":"http://news.baidu.com/n?cmd=4&class=zhongguojq&tn=rss"}
 {"url":"http://news.baidu.com/n?cmd=4&class=taihaijj&tn=rss"}
 {"url":"http://news.baidu.com/n?cmd=4&class=guojijq&tn=rss"}
@@ -72,5 +71,18 @@
 {"url":"http://news.baidu.com/n?cmd=4&class=shwx&tn=rss"}
 {"url":"http://news.baidu.com/n?cmd=4&class=zqsk&tn=rss"}
 {"url":"http://news.baidu.com/n?cmd=4&class=qwys&tn=rss"}
-
 {"url":"http://news.baidu.com/ns?word=%C8%BA%CC%E5%CA%C2%BC%FE&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%C7%BF%D5%BC&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%C7%BF%D5%F7&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%C7%BF%B2%F0&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%B7%C7%B7%A8%BC%AF%BB%E1&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%B4%F3%D6%DA%BF%D6%BB%C5&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%B1%A9%C2%D2&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%C9%A7%C2%D2&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%BE%DB%D6%DA&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%BC%AF%BB%E1&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%B0%D5%B9%A4&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%BC%AF%CC%E5%C9%CF%B7%C3&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%CA%BE%CD%FE&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%D3%CE%D0%D0&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
+{"url":"http://news.baidu.com/ns?word=%BF%B9%D2%E9&tn=newsrss&sr=0&cl=2&rn=20&ct=0"}
