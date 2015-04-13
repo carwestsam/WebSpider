@@ -145,15 +145,15 @@ class baiduNewsSpider( CrawlSpider ):
         #sel = HtmlXPathSelector( response )
 
         doc = response.body.decode( response.encoding )
-	content = ""
-	title = ""
-	try:
-		content = Doc( doc).summary()
-		title = Doc(doc).short_title()
-		print content
-	except:
-		print "err at parseArticle"
-		return
+    	content = ""
+    	title = ""
+    	try:
+    		content = Doc( doc).summary()
+    		title = Doc(doc).short_title()
+    		print content
+    	except:
+    		print "err at parseArticle"
+    		return
 
 
         #print response.body

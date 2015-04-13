@@ -7,6 +7,7 @@ from sinaRss.items import contentItem
 from scrapy.http import Request
 from scrapy.http import HtmlResponse
 from dateutil import parser as timeParser
+from readability.readability import Document as Doc
 import psycopg2
 import xmltodict
 import codecs
@@ -147,23 +148,18 @@ class ifengNewsSpider( CrawlSpider ):
         #print response.__dict__
         #sel = HtmlXPathSelector( response )
 
-        doc = response.body
+        
 
-        #print response.body
-        fpt = codecs.open('tmp.html','w', 'utf-8')
-        #fpt.write ( response.body.decode( response.encoding).encode('utf-8'))
-        fpt.write ( response.body.decode( response.encoding) )
-        jsresponse = muterun_js("ParseContent.js")
+        doc = response.body.decode( response.encoding )
         content = ""
         title = ""
-    	if jsresponse.exitcode==0:
-    		obj = json.loads((jsresponse.stdout))
-    		title = obj['title']
-    		content = obj['content']
-    		print content
-    	else:
-    		sys.stderr.write(jsresponse.stderr)
-    		pass
+        try:
+            content = Doc( doc).summary()
+            title = Doc(doc).short_title()
+            print content
+        except:
+            print "err at parseArticle"
+            return
 
         """
         tree = html.fromstring(response.body.decode( response.encoding))
