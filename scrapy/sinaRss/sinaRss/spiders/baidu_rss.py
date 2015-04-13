@@ -6,6 +6,7 @@ from sinaRss.items import SinaRssItem
 from sinaRss.items import contentItem
 from scrapy.http import Request
 from scrapy.http import HtmlResponse
+from readability.readability import Document as Doc
 import psycopg2
 import xmltodict
 import codecs
@@ -143,23 +144,33 @@ class baiduNewsSpider( CrawlSpider ):
         #print response.__dict__
         #sel = HtmlXPathSelector( response )
 
-        doc = response.body
+        doc = response.body.decode( response.encoding )
+	content = ""
+	title = ""
+	try:
+		content = Doc( doc).summary()
+		title = Doc(doc).short_title()
+		print content
+	except:
+		print "err at parseArticle"
+		return
+
 
         #print response.body
-        fpt = codecs.open('tmp.html','w', 'utf-8')
+        #fpt = codecs.open('tmp.html','w', 'utf-8')
         #fpt.write ( response.body.decode( response.encoding).encode('utf-8'))
-        fpt.write ( response.body.decode( response.encoding) )
-        jsresponse = muterun_js("ParseContent.js")
-        content = ""
-        title = ""
-    	if jsresponse.exitcode==0:
-    		obj = json.loads((jsresponse.stdout))
-    		title = obj['title']
-    		content = obj['content']
-    		print content
-    	else:
-    		sys.stderr.write(jsresponse.stderr)
-    		pass
+        #fpt.write ( response.body.decode( response.encoding) )
+        #jsresponse = muterun_js("ParseContent.js")
+        #content = ""
+        #title = ""
+    	#if jsresponse.exitcode==0:
+    	#	obj = json.loads((jsresponse.stdout))
+    	#	title = obj['title']
+    	#	content = obj['content']
+    	#	print content
+    	#else:
+    	#	sys.stderr.write(jsresponse.stderr)
+    	#	pass
 
         """
         tree = html.fromstring(response.body.decode( response.encoding))
