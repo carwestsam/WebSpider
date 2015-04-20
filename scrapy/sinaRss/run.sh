@@ -5,7 +5,8 @@ while true; do
     scrapy crawl renmin
     scrapy crawl xinhua2
     scrapy crawl huanqiu
+    scrapy crawl ifeng
     scrapy crawl baidu
-    sleep 10m
+    sleep 20m
 done
 
