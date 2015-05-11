@@ -21,8 +21,8 @@ class Preprocess:
 
     def all(self):
         self.conn.commit()
-        self.cur.execute("select * from allcontent full join allrss on allcontent.url = allrss.url")
-        self.filePtr = codecs.open('selected_all.txt', 'w', 'utf-8')
+        self.cur.execute("select * from allcontent as all full join allrss on all.url = allrss.url where pubdate > date '20150501'")
+        #self.filePtr = codecs.open('selected_all.txt', 'w', 'utf-8')
         for record in self.cur.fetchall():
             #print record[2]
             try:
@@ -36,7 +36,7 @@ class Preprocess:
                         if word == keyword:
                             flag = True
                             print content
-                            self.filePtr.write(json.dumps({"content": content}) + "\n")
+                            #self.filePtr.write(json.dumps({"content": content}) + "\n")
                             self.cnt += 1
                             self.cur.execute("insert into basicwords(pubdate,pubtime,location,content,title,matchedwords) values(%s,%s,%s,%s,%s,%s)",(record[4],record[5],'北京',record[1],record[3],word))
                             break
@@ -51,7 +51,7 @@ class Preprocess:
     def baidu(self):
         self.filePtr = codecs.open('selected.txt', 'w', 'utf-8')
         self.conn.commit()
-        self.cur.execute("select * from baiducontent full join baidurss on baiducontent.url = baidurss.url limit 1000")
+        self.cur.execute("select * from baiducontent full join baidurss on baiducontent.url = baidurss.url where pubdate > date '20150501'")
         cnnt = 0
         for record in self.cur.fetchall():
             cnnt += 1
@@ -73,7 +73,7 @@ class Preprocess:
                             flag = True
                             print content
                             #print record[2],record[6],record[0],word
-                            self.filePtr.write(json.dumps({"title": record[1], "content": content}) + "\n")
+                            #self.filePtr.write(json.dumps({"title": record[1], "content": content}) + "\n")
                             self.cur.execute("insert into basicwords(pubdate,pubtime,location,content,title,matchedwords) values(%s,%s,%s,%s,%s,%s)",(record[5],record[6],'北京',record[1],record[4],word))
                             self.conn.commit()
 
