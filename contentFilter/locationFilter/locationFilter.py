@@ -46,7 +46,7 @@ class locationFilter:
                             print content
                             #print record[2],record[6],record[0],word
                             #self.filePtr.write(json.dumps({"title": record[1], "content": content}) + "\n")
-                            self.cur.execute("insert into locations(pubdate,pubtime,location,content,title) values(%s,%s,%s,%s,%s)",(record[0],record[1],keyword,record[5],record[4]))
+                            self.cur.execute("insert into locations(pubdate,pubtime,location,content,title) values(%s,%s,%s,%s,%s) where pubdate > current_date - Integer '3'",(record[0],record[1],keyword,record[5],record[4]))
                             self.conn.commit()
 
                             #self.cnt += 1

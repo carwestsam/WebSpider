@@ -49,42 +49,50 @@ class Preprocess:
         self.conn.commit()
 
     def baidu(self):
-        self.filePtr = codecs.open('selected.txt', 'w', 'utf-8')
+        #self.filePtr = codecs.open('selected.txt', 'w', 'utf-8')
         self.conn.commit()
-        self.cur.execute("select * from baiducontent full join baidurss on baiducontent.url = baidurss.url where pubdate > date '20150501'")
+        self.cur.execute("select * from baiducontent right join (select * from baidurss where pubdate>current_date-Integer '1' ) as rss on baiducontent.url = rss.url  limit 10000 ")
         cnnt = 0
-        for record in self.cur.fetchall():
-            cnnt += 1
-            if ( cnnt % 1000 == 0 ):
-                print "%d" % cnnt
-            #print record[2]
-            try:
-                root = etree.fromstring(record[2])
-                contentList = root.xpath("//descendant-or-self::*/text()")
-                content = ""
-                for part in contentList:
-                    content += " " + part
-                #print content
-                seglist = jieba.cut(content)
-                for word in seglist:
-                    flag = False
-                    for keyword in self.KEYWORDS:
-                        if word == keyword:
-                            flag = True
-                            print content
-                            #print record[2],record[6],record[0],word
-                            #self.filePtr.write(json.dumps({"title": record[1], "content": content}) + "\n")
-                            self.cur.execute("insert into basicwords(pubdate,pubtime,location,content,title,matchedwords) values(%s,%s,%s,%s,%s,%s)",(record[5],record[6],'北京',record[1],record[4],word))
-                            self.conn.commit()
+        try:
+            while True:
+                #for record in self.cur.fetchall():
+                record = self.cur.fetchone()
+                if not record:
+                    break
+                cnnt += 1
+                if ( cnnt % 1000 == 0 ):
+                    print "%d" % cnnt
+                #print record[2]
+                try:
+                    root = etree.fromstring(record[2])
+                    contentList = root.xpath("//descendant-or-self::*/text()")
+                    content = ""
+                    for part in contentList:
+                        content += " " + part
+                    #print content
+                    seglist = jieba.cut(content)
+                    for word in seglist:
+                        flag = False
+                        for keyword in self.KEYWORDS:
+                            if word == keyword:
+                                flag = True
+                                print record[1] 
+                                #print record[2],record[6],record[0],word
+                                #self.filePtr.write(json.dumps({"title": record[1], "content": content}) + "\n")
+                                self.cur.execute("insert into basicwords(pubdate,pubtime,location,title,content,matchedwords) values(%s,%s,%s,%s,%s,%s)",(record[5],record[6],'北京',record[1],record[2],word))
+                                self.conn.commit()
 
-                            self.cnt += 1
+                                self.cnt += 1
+                                break
+                        if flag:
                             break
-                    if flag:
-                        break
-            except:
-                print "some error"
+                except:
+                    print "some error"
 
-        self.conn.commit()
+            self.conn.commit()
+        except:
+            print 'end'
+
 
 
 if __name__ == "__main__":
