@@ -12,20 +12,20 @@ import random
 lock = True
 
 while lock :
-	conn.commit()
-	cur.execute("select lock from process")
-	lock = cur.fetchone()[0]
+    conn.commit()
+    cur.execute("select lock from process")
+    lock = cur.fetchone()[0]
 
 
-	
-	if lock:
-		print "waiting"
-		time.sleep(random.random())
-	else :
-		conn.commit()
-		cur.execute("update process set lock=True where id=1")
-		conn.commit()
-		break
+    
+    if lock:
+        print "waiting"
+        time.sleep(random.random())
+    else :
+        conn.commit()
+        cur.execute("update process set lock=True where id=1")
+        conn.commit()
+        break
 
 
 
@@ -60,27 +60,27 @@ cur = conn.cursor()
 from readability.readability import Document as Doc
 from bs4 import BeautifulSoup
 
-try:
-	for line in raws:
-	    idx = line[0]
-	    time = line[1]
-	    url = line[2]
-	    raw = line[3]
-	    title = line[4]
-	    print idx, time, url, title
 
-	    content = Doc(raw).summary()
-	    content = BeautifulSoup(content).get_text()
+for line in raws:
+    idx = line[0]
+    time = line[1]
+    url = line[2]
+    raw = line[3]
+    title = line[4]
+    print idx, time, url, title
 
-	    #print content
+    try:
+        content = Doc(raw).summary()
+        content = BeautifulSoup(content).get_text()
+
+        conn.commit()
+        cur.execute("insert into page(id, title, content, url, pubtime) values( %s, %s, %s, %s, %s)", (idx, title, content, url, time)) 
+        conn.commit()
+    except:
+        conn.commit()
+        pass
 
 
-	    conn.commit()
-	    cur.execute("insert into page(id, title, content, url, pubtime) values( %s, %s, %s, %s, %s)", (idx, title, content, url, time)) 
-	    conn.commit()
-
-except:
-	pass
 
 conn.commit()
 cur.execute("update process set lock=False where id=1")

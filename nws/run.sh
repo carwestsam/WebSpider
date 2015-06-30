@@ -7,6 +7,8 @@ while true; do
     scrapy crawl baidu
     cd $DIR/parsePage
     python process.py
+    cd $DIR/filter
+    python filter.py
     sleep 10m
 done
 

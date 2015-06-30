@@ -25,7 +25,7 @@ while lock:
 		time.sleep(random.random())
 	else :
 		conn.commit()
-		cur.execute("update filterlock set lock=True where id = 1")
+		#cur.execute("update filterlock set lock=True where id = 1")
 		lock = False
 		conn.commit()
 		break
@@ -67,48 +67,37 @@ lc = Location()
 
 
 for line in raws:
+
 	idx = line[0]
 	title = line[1]
 	content = line[2]
 	url = line[3]
 	time = line[4]
 
-	print content, type(content)
-	eve = ev.label(content)
-	loc = lc.label(content)
-	eve = "no"
+	try:
+		content = content.decode('utf-8')
+		
+		eve = ev.label(content)
+		loc = lc.label(content)
+		
+		eve = "no"
 
-	print eve, loc
+		#print eve, loc
 
-	#if eve[1] != None and loc[1] != None:
-	if loc[1] != None:
-		print content
+		#if eve[1] != None and loc[1] != None:
+		if loc[1] != None:
+			#print content
+			conn.commit()
+			print idx, title, eve[1], loc[1]
+			tpl = ( idx, title, content, url, time, eve[1], loc[1] )
+			cur.execute( "insert into labeled(id, title, content, url, pubtime, event, location) values(%s, %s, %s, %s, %s, %s, %s)", tpl )
+			conn.commit()
+	except:
 		conn.commit()
-		tpl = ( idx, title, content, url, time, eve, loc )
-		cur.execute( "insert into labeled(id, title, content, url, pubtime, event, location)", tpl )
-		conn.commit()
+		pass
 
-# try : 
-# 	for lin in raws:
-# 		idx = line[0]
-# 		time = line[1]
-# 		url = line[2]
-# 		content = line[3]
-# 		title = line[4]
 
-# 		eve = ev.label(content)
-# 		loc = lc.label(content)
 
-# 		#if eve[1] != None and loc[1] != None:
-# 		if loc[1] != None:
-# 			conn.commit()
-# 			tpl = ( idx, title, content, url, time, eve, loc )
-# 			cur.execute( "insert into labeled(id, title, content, url, pubtime, event, location)", tpl )
-# 			conn.commit()
-
-# except:
-# 	print "error in filter"
-# 	pass
 
 conn.commit()
 cur.execute("update filterlock set lock=False where id=1")

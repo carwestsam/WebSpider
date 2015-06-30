@@ -10,15 +10,12 @@ class Event:
 
 	def label(self,  content):
 
-		content = content.decode().encode('utf-8')
-		print content
 
 		flag = False
 		matched = None
 
 		for word in self.KEYWORDS:
-			word = word.decode().encode('utf-8')
-			print word
+			
 			if word in content:
 				flag = True
 				matched = word
