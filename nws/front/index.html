@@ -3,9 +3,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<style type="text/css">
-		body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
-		#mapx{width:100%;height:500px;}
-		p{margin-left:5px; font-size:14px;}
+		body, html {position:absolute;width: 100%;height: 100%;margin:0;padding:0;margin:0;border:0;font-family:"微软雅黑";overflow-y:hidden;}
+		#mapx{position:absolute;height:100%;width:80%;padding:0;margin:0;border:0;}
+        #sidebar{position:absolute;width:20%;height:100%;left:80%;padding:5px;margin:0;border:0;}
 	</style>
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=uZUxQ6aCPUE3fHeHYYtDqgCj"></script>
 	<script type="text/javascript" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
@@ -15,9 +15,10 @@
 <body>
 	<div id="mapx"></div>
     <div id="r-result"></div>
-	<div>
-        <input type="text" /> startTime <br />
-        <input type="text" /> endTime <br />
+	<div id="sidebar">
+        <h4>开始时间：</h4> <input type="text" size="4" maxlength="4" id="s1" /> 年 <br> <input type="text" size="4" maxlength="2" min="1" max="12" id="s2" /> 月 <br> <input type="text" size="4" min="1" max="31" maxlength="2" id="s3" /> 日 <br /> 
+        <h4>结束日期：</h4> <input type="text" size="4" maxlength="4" id="e1" /> 年 <br> <input type="text" size="4" maxlength="2" min="1" max="12" id="e2" /> 月 <br> <input type="text" size="4" min="1" max="31" maxlength="2" id="e3" /> 日 <br />
+        <hr />
         <button onclick="func()">
             Get
         </button>
@@ -35,22 +36,38 @@
     var myGeo = new BMap.Geocoder();
     var myIcon = new BMap.Icon("/images/pin.png", new BMap.Size(32,32));
     
+    
+    var start = "2015-06-30";
+    var end = "2015-06-30";
+    
 
     function func(){
         //bdGEO();
-        
-        $.getJSON('http://localhost/server/test.php', function(data){
-            for ( var idx =0; idx < data.length; idx++ ){
-                //console.log( data[idx].title, data[idx].location );
-                console.log(data[idx]);
-                (function(obj){myGeo.getPoint( obj.location, function(point){
-                    if (point){
-                        var addr = new BMap.Point(point.lng, point.lat);
-                        addMarker2( addr, obj );
-                    }
-                }, "中国");})(data[idx]);
+        $.getJSON(
+            'http://localhost/server/post.php', 
+            {name:'allen', startTime: start, endTime: end}, 
+            function(data){
+                console.log(data);
             }
-        })
+        );
+        start = $("#s1").val() + "-" + $("#s2").val() + "-" + $("#s3").val();
+        end = $("#e1").val() + "-" + $("#e2").val() + "-" + $("#e3").val();
+        console.log(start, end);
+        $.getJSON('http://localhost/server/test.php',
+            {startTime: start, endTime: end}, 
+            function(xdata){
+                data = xdata['data'];
+                for ( var idx =0; idx < data.length; idx++ ){
+                    //console.log( data[idx].title, data[idx].location );
+                    console.log(data[idx]);
+                    (function(obj){myGeo.getPoint( obj.location, function(point){
+                        if (point){
+                            var addr = new BMap.Point(point.lng, point.lat);
+                            addMarker2( addr, obj );
+                        }
+                    }, "中国");})(data[idx]);
+                }
+            })
     }
     
     function buildInfo( obj ){
