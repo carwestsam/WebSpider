@@ -12,7 +12,6 @@ import codecs
 import json
 from lxml import html
 import sys
-from Naked.toolshed.shell import muterun_js
 
 
 class baiduNewsSpider( CrawlSpider ):
