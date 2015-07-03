@@ -1,6 +1,9 @@
 #!/bin/python2
 # -*- encoding:utf-8 -*-
 
+
+keywords = [u'斗殴']
+
 import psycopg2
 
 conn = psycopg2.connect("dbname=news2 user=bdccl")
