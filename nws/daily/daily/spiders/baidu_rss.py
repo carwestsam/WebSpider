@@ -22,7 +22,7 @@ class baiduNewsSpider( CrawlSpider ):
     configDict = {}
 
     fileptr = None
-    
+
     conn = None
     cur = None        
 
@@ -55,11 +55,10 @@ class baiduNewsSpider( CrawlSpider ):
 
         dict = xmltodict.parse( xmldata, encoding='utf-8' )
         rssItems = dict['rss']['channel']['item']
-
+        
         NewsList = []
 
         for rssItem in rssItems:
-
             title = rssItem['title']
             link = rssItem['link']
             pubDate = rssItem['pubDate']
