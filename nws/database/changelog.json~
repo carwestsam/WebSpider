@@ -444,7 +444,7 @@
 
         {
             "changeSet": {
-                "id" : "14",
+                "id" : "11",
                 "author": "carwest",
                 "changes" : [
                 {
@@ -452,7 +452,7 @@
                         "tableName" : "preprocess",
                         "columns" : [
                         {
-                            "column": {
+                            "column":{
                                 "name" : "id",
                                 "type" : "bigint",
                             }
@@ -503,7 +503,7 @@
                         "addForeignKeyConstraint" : {
                         "baseColumnNames" : "id",
                         "baseTableName" : "preprocess",
-                        "constraintName" : "prepage_idx",
+                        "constraintName" : "page_idx",
                         "referencedColumnNames" : "id",
                         "referencedTableName" : "labeled"
                     }

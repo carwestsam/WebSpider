@@ -14,14 +14,14 @@ class Preprocess:
 
 
     def __init__(self):
-        self.conn = psycopg2.connect("dbname=news user=bdccl")
+        self.conn = psycopg2.connect("dbname=news2 user=bdccl")
         self.cur = self.conn.cursor()
         self.filePtr = None
         self.cnt = 0
 
     def all(self):
         self.conn.commit()
-        self.cur.execute("select * from allcontent as all full join allrss on all.url = allrss.url where pubdate > date '20150501'")
+        self.cur.execute("select * from labeled as all full join allrss on all.url = allrss.url where pubdate > date '20150501'")
         #self.filePtr = codecs.open('selected_all.txt', 'w', 'utf-8')
         for record in self.cur.fetchall():
             #print record[2]

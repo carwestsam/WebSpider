@@ -14,7 +14,7 @@ class Preprocess:
 
 
     def __init__(self):
-        self.conn = psycopg2.connect("dbname=news user=bdccl")
+        self.conn = psycopg2.connect("dbname=news2 user=bdccl")
         self.cur = self.conn.cursor()
         self.filePtr = None
         self.cnt = 0
